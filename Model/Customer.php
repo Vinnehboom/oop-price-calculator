@@ -36,12 +36,28 @@ class Customer
         $statement->execute();
         $discount = $statement->fetch();
         if ($discount['fixed_discount']) {
-            $this->fixedDisc = $discount['fixed_discount'];
+            $this->fixedDisc = intval($discount['fixed_discount']);
             $this->variableDisc = 0;
         } else if ($discount['variable_discount']) {
-            $this->variableDisc = $discount['variable_discount'];
+            $this->variableDisc = intval($discount['variable_discount']);
             $this->fixedDisc = 0;
         }
+    }
+
+    /**
+     * @return int
+     */
+    public function getFixedDisc(): int
+    {
+        return $this->fixedDisc;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVariableDisc(): int
+    {
+        return $this->variableDisc;
     }
 
 

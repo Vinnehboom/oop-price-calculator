@@ -39,10 +39,21 @@ class IndexController
             $customers[] = new Customer($firstname, $lastname, $id, $groupId);
 
         }
-      /*  $pdo = openConnection();
         foreach($customers as $customer) {
-            $customer->setDiscount($pdo);
-        }*/
+            $customer->setDiscount();
+            if ($customer->getFixedDisc() === 0)
+            {
+                echo $customer->getVariableDisc() .'% <br>';
+            } else if ($customer->getVariableDisc() === 0)
+            {
+                echo $customer->getFixedDisc() .'<br>';
+            }
+        }
+
+        $jos = $customers[3];
+        $group = new CustomerGroup($jos);
+        print_r($group->groupId);
+
         //load the view
         require 'View/index.php';
     }
