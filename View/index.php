@@ -4,18 +4,22 @@ Anything complex should be calculated in the model -->
 <section>
     <h4>Hello</h4>
 
-    <form action="" method="post">
-    <select>
+    <form action="./index.php" method="post">
+    <select name="product">
+        <option>Product...</option>
         <?php foreach ($products as $product) {
             {echo "<option value='{$product->getProductId()}'> {$product->getProductName()} </option>";}}?>
     </select>
 
 
-        <select>
+        <select name="customer">
+            <option>Customer...</option>
             <?php foreach ($customers as $customer) {
                 {echo "<option value='{$customer->getId()}'> {$customer->getName()} </option>";}}?>
         </select>
         <input type="submit">
     </form>
+
+    <h2> <?php if ($finalPrice) {echo $finalPrice;} ?></h2>
 </section>
-<?php require 'includes/footer.php'?>;
+<?php require 'includes/footer.php'?>

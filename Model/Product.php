@@ -5,19 +5,19 @@ class Product
 {
 
     private string $productName;
-    private int $productPrice;
+    private float $productPrice;
     private int $productId;
 
     /**
      * Product constructor.
      * @param string $productName
-     * @param int $productPrice
+     * @param float $productPrice
      */
-    public function __construct(string $productName, int $productPrice, int $productId)
+    public function __construct(string $productName, float $productPrice, int $productId)
     {
         $this->productName = $productName;
         $this->productPrice = ($productPrice /100);
-        $this->productId = $productId;
+        $this->productId = intval($productId);
     }
 
     /**

@@ -9,7 +9,6 @@ class Customer
     private int $fixedDisc;
     private int $variableDisc;
 
-
     /**
      * Customer constructor.
      * @param string $firstName
@@ -23,9 +22,10 @@ class Customer
         $this->lastName = $lastName;
         $this->id = $id;
         $this->groupId = $groupId;
+        $this->setDiscount();
     }
 
-    public function setDiscount()
+    private function setDiscount()
     {
         $database = new DatabaseHandler();
         $database->openConnection();
@@ -60,9 +60,6 @@ class Customer
         return $this->variableDisc;
     }
 
-
-
-
     /**
      * @return string
      */
@@ -90,9 +87,4 @@ class Customer
     /**
      * @return CustomerGroup
      */
-
-
-
-
-
 }
