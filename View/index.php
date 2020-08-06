@@ -2,7 +2,15 @@
 <!-- this is the view, try to put only simple if's and loops here.
 Anything complex should be calculated in the model -->
 <section>
-    <h4>Hello</h4>
+    <h4>
+        Hello
+    <?php if(isset($_SESSION["currentUser"])){
+        echo $_SESSION["currentUser"]->getName();
+    } else {
+        echo 'stranger';
+    }
+    ?>
+    </h4>
 
     <form action="./index.php" method="post">
     <select name="product">
@@ -11,12 +19,13 @@ Anything complex should be calculated in the model -->
             {echo "<option value='{$product->getProductId()}'> {$product->getProductName()} </option>";}}?>
     </select>
 
-
+        <?php if(!$_SESSION['loggedIn']): ?>
         <select name="customer">
             <option>Customer...</option>
             <?php foreach ($customers as $customer) {
                 {echo "<option value='{$customer->getId()}'> {$customer->getName()} </option>";}}?>
         </select>
+        <?php endif; ?>
         <input type="submit">
     </form>
 

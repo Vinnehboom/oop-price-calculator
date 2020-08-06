@@ -7,7 +7,7 @@ class Price
 
     public function __construct(Product $product, Customer $customer)
     {
-        $product_price = $product->getProductPrice();
+        $product_price = (float)$product->getProductPrice();
         $group = new CustomerGroup($customer);
         $discounts = $group->getDiscounts();
         $fixedCustomer = $customer->getFixedDisc();
@@ -51,9 +51,9 @@ class Price
     }
 
     /**
-     * @return int|mixed
+     * @return float
      */
-    public function getPrice()
+    public function getPrice() : float
     {
         return $this->price;
     }
