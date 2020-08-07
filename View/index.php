@@ -30,5 +30,6 @@ Anything complex should be calculated in the model -->
     </form>
 
     <h2> <?php if ($finalPrice) {echo $finalPrice;} ?></h2>
+    <h3> <?php print_r($familyArray); ?></h3>
 </section>
 <?php require 'includes/footer.php'?>

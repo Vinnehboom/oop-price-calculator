@@ -16,20 +16,17 @@ class Customer
      * @param int $id
      * @param int $groupId
      */
-    public function __construct(string $firstName, string $lastName, int $id, int $groupId)
+    public function __construct(string $firstName, string $lastName, int $id, int $groupId, PDO $pdo)
     {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->id = $id;
         $this->groupId = $groupId;
-        $this->setDiscount();
+        $this->setDiscount($pdo);
     }
 
-    private function setDiscount() : void
+    private function setDiscount(PDO $pdo) : void
     {
-        $database = new DatabaseHandler();
-        $database->openConnection();
-        $pdo = $database->getPdo();
         $id = $this->getId();
         $statement = $pdo->prepare('SELECT fixed_discount, variable_discount from customer where id = :id');
         $statement->bindValue('id', $id);
@@ -42,6 +39,14 @@ class Customer
             $this->variableDisc = intval($discount['variable_discount']);
             $this->fixedDisc = 0;
         }
+    }
+
+    /**
+     * @param int $groupId
+     */
+    public function setGroupId(int $groupId): void
+    {
+        $this->groupId = $groupId;
     }
 
     /**

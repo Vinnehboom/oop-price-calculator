@@ -5,9 +5,11 @@ class IndexController
     public function render(array $GET, array $POST)
     {
         $database = new DatabaseHandler();
+        $pdo = $database->getPdo();
         $customers = $database->fetchFullCustomerList();
         $products = $database->fetchFullProductList();
         $finalPrice = '';
+        $familyArray = [];
         if(!isset($_SESSION['currentUser'])){
             if (isset($_POST['product']) && isset($_POST['customer']))
             {
@@ -20,8 +22,10 @@ class IndexController
             if(isset($_POST['product'])){
                 $Jos = $_SESSION['currentUser'];
                 $produkt = $database->fetchProductById(intval($_POST['product']));
+                $groupJos = new CustomerGroup($Jos, $pdo);
+                $groupJos->groupLoader($Jos, $pdo);
+                $familyArray = $groupJos->getFamily();
                 $price = new Price($produkt, $Jos);
-                if ($price->IsFixedCustomer())
                 $finalPrice = $price->getPrice();
             }
         }

@@ -7,13 +7,9 @@ class CustomerGroup
     private array $discounts;
     private array $family;
 
-    public function __construct(Customer $customer)
+    public function __construct(Customer $customer, PDO $pdo)
     {
         $customerGroupId = $customer->getGroupId();
-        // pdo opening
-        $database = new DatabaseHandler();
-        $database->openConnection();
-        $pdo = $database->getPdo();
         // start statement
         $statement = $pdo->prepare('SELECT parent_id, fixed_discount, variable_discount from customer_group where id =:id');
         $statement->bindValue('id', $customerGroupId);
@@ -22,13 +18,13 @@ class CustomerGroup
         $this->parentId = intval($totalArray['parent_id']);
         $this->discounts['variable'] =  intval($totalArray['variable_discount']);
         $this->discounts['fixed'] = intval($totalArray['fixed_discount']);
-        $this->setDiscounts();
+        $this->setDiscounts($pdo);
     }
-    private function setDiscounts() : void
+    private function setDiscounts($pdo) : void
     {
-        $database = new DatabaseHandler();
+    /*    $database = new DatabaseHandler();
         $database->openConnection();
-        $pdo = $database->getPdo();
+        $pdo = $database->getPdo();*/
 
         $parentId = $this->getParentId();
         $statement = $pdo->prepare('SELECT parent_id, fixed_discount, variable_discount from customer_group where id = :parent_id');
@@ -46,9 +42,33 @@ class CustomerGroup
         if ($parent['parent_id'])
         {
             $this->parentId = $parent['parent_id'];
-            $this->setDiscounts();
+            $this->setDiscounts($pdo);
         }
     }
+
+    public function groupLoader(Customer $customer, PDO $pdo) : void
+    {
+        $groupId = $customer->getGroupId();
+        $statement = $pdo->prepare('SELECT * from customer_group where id = :id');
+        $statement->bindValue('id', $groupId);
+        $statement->execute();
+        $fetch = $statement->fetch();
+        $this->family[] = [$fetch['name'] => ['variable' => (int)$fetch['variable_discount']]];
+        $this->family[] = [$fetch['name'] => ['fixed' => (int)$fetch['fixed_discount']]];
+        if ($fetch['parent_id'] !== null) {
+            $customer->setGroupId((int)$fetch['parent_id']);
+            $this->groupLoader($customer, $pdo);
+        }
+    }
+    /**
+     * @return array
+     */
+    public function getFamily(): array
+    {
+        return $this->family;
+    }
+
+
     /**
      * @return array
      */

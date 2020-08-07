@@ -12,9 +12,7 @@ class LoginController
         }
         $database = new DatabaseHandler();
         $database->openConnection();
-
         $pdo = $database->getPdo();
-
         $statement = $pdo->prepare( 'SELECT * from customer where firstname = :firstname and lastname = :lastname');
         $statement->bindValue("firstname", $POST['first_name']);
         $statement->bindValue("lastname", $POST['last_name']);
@@ -27,7 +25,7 @@ class LoginController
         } else {
             $_SESSION['loggedIn'] = true;
             if(!isset($_SESSION['currentUser'])){
-                $_SESSION['currentUser'] = new Customer($login_result['firstname'], $login_result['lastname'], (int)$login_result['id'], (int)$login_result['group_id']);
+                $_SESSION['currentUser'] = new Customer($login_result['firstname'], $login_result['lastname'], (int)$login_result['id'], (int)$login_result['group_id'], $pdo);
             }
             $controller = new IndexController();
             $controller->render($GET, $POST);

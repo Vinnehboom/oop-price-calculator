@@ -6,8 +6,10 @@ class Price
     private float $price;
     public function __construct(Product $product, Customer $customer)
     {
+        $database = new DatabaseHandler();
+        $pdo = $database->getPdo();
         $product_price = (float)$product->getProductPrice();
-        $group = new CustomerGroup($customer);
+        $group = new CustomerGroup($customer, $pdo);
         $discounts = $group->getDiscounts();
         $fixedCustomer = $customer->getFixedDisc();
         $variableCustomer = $customer->getVariableDisc();
