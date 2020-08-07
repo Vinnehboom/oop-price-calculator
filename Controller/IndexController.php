@@ -21,9 +21,13 @@ class IndexController
                 $Jos = $_SESSION['currentUser'];
                 $produkt = $database->fetchProductById(intval($_POST['product']));
                 $price = new Price($produkt, $Jos);
+                if ($price->IsFixedCustomer())
                 $finalPrice = $price->getPrice();
             }
         }
+
         require 'View/index.php';
     }
+
+
 }

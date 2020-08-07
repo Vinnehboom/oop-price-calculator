@@ -3,10 +3,9 @@
 
 class CustomerGroup
 {
-    public array $groupId;
     private int $parentId;
-
     private array $discounts;
+    private array $family;
 
     public function __construct(Customer $customer)
     {
@@ -17,13 +16,14 @@ class CustomerGroup
         $pdo = $database->getPdo();
         // start statement
         $statement = $pdo->prepare('SELECT parent_id, fixed_discount, variable_discount from customer_group where id =:id');
-        $statement->bindValue('id', $customerGroupId); $statement->execute(); $totalArray = $statement->fetch();
+        $statement->bindValue('id', $customerGroupId);
+        $statement->execute();
+        $totalArray = $statement->fetch();
         $this->parentId = intval($totalArray['parent_id']);
         $this->discounts['variable'] =  intval($totalArray['variable_discount']);
         $this->discounts['fixed'] = intval($totalArray['fixed_discount']);
         $this->setDiscounts();
     }
-
     private function setDiscounts() : void
     {
         $database = new DatabaseHandler();

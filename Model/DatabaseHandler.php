@@ -13,11 +13,10 @@ class DatabaseHandler
 
     function openConnection(): PDO
     {
-        // No bugs in this function, just use the right credentials.
         $dbhost = "localhost";
         $dbuser = "becode";
-        $dbpass = "becode1993";
-        $db = "Price_exercise_db";
+        $dbpass = "becode";
+        $db = "price_calculator";
 
         $driverOptions = [
             PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'",

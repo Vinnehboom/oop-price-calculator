@@ -25,7 +25,7 @@ class Customer
         $this->setDiscount();
     }
 
-    private function setDiscount()
+    private function setDiscount() : void
     {
         $database = new DatabaseHandler();
         $database->openConnection();

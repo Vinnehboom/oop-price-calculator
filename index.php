@@ -26,6 +26,8 @@ if(isset($_POST['first-name'], $_POST['last-name']) || !$_SESSION['loggedIn']){
     $controller = new IndexController();
     $controller->render($_GET, $_POST);
 }
+
+
 //you could write a simple IF here based on some $_GET or $_POST vars, to choose your controller
 //this file should never be more than 20 lines of code!
 

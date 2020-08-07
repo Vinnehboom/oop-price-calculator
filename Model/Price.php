@@ -4,7 +4,6 @@
 class Price
 {
     private float $price;
-
     public function __construct(Product $product, Customer $customer)
     {
         $product_price = (float)$product->getProductPrice();
@@ -15,7 +14,6 @@ class Price
         // calculation
         if($fixedCustomer)
         {
-            // since
             $product_price -= $fixedCustomer;
             // if (20 >= 0.3 x 20 =product price) -- if (20 >= 6) vs. if (20 >= 0.3 x 100) -- (20 >= 30) = false --> go to variable discount
             if ($discounts['fixed'] >= $discounts['variable']/100 * $product_price)
