@@ -31,21 +31,12 @@
         <td></td>
     </tr>
     <?php
-    foreach ($familyArray as $key => $value) {
+    foreach ($groupnames as $index => $value) {
     echo "<tr>";
-    echo '<td>' . $value['name'] . '</td>';
-
-    if ($value['fixed']) {
-    echo '<td>' . $value['fixed'] . '</td>';
-    } else {
-        echo '<td>0</td>';
-    }
-    if ($value['variable']){
-    echo '<td>' . $value['variable'] . '%</td>';
-    } else {
-    echo '<td>0%</td>';
-    }
-    echo '<td>test</td>';
+    echo '<td>' . $value . '</td>';
+    echo '<td>' . $fixedDiscounts[$index] . '</td>';
+    echo '<td>' . $variableDiscounts[$index] . '%</td>';
+    echo '<td></td>';
     echo '<tr>';
     }
     ?>
@@ -57,8 +48,8 @@
     </tr>
     <tr>
         <td>//</td>
-        <td>15</td>
-        <td>20% of PRICE - customer fixed</td>
+        <td><?php echo $bestDiscounts['fixed'] ?></td>
+        <td><?php echo $bestDiscounts['variable'] . "% of PRICE - customer fixed" ?></td>
         <td></td>
     </tr>
 </table>

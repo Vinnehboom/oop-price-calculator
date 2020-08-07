@@ -30,6 +30,9 @@ Anything complex should be calculated in the model -->
     </form>
     <h2> <?php if ($finalPrice) {
         include 'includes/table.php';
+        echo "Formula for endresult: <br>";
+        echo "Initial price - fixed discount user - fixed discount customer group OR - variable discount customer group - variable discount customer <br>";
+        echo "{$productPrice} - {$userFixedDisc} - {$bestDiscounts['fixed']} OR ({$bestDiscounts['variable']}% of {$priceMinFixed} =) {$firstVarDisc} - {$userVariableDisc}% of remainder{$lastStep}<br>";
         echo $finalPrice;
     } ?></h2>
     <h2> <?php if ($finalPrice) {echo $finalPrice;} ?></h2>

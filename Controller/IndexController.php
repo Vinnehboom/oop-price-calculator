@@ -23,12 +23,18 @@ class IndexController
                 $Jos = $_SESSION['currentUser'];
                 $produkt = $database->fetchProductById(intval($_POST['product']));
                 $groupJos = new CustomerGroup($Jos, $pdo);
-                $groupJos->groupLoader($Jos, $pdo);
-                $familyArray = $groupJos->getFamily();
                 $price = new Price($produkt, $Jos);
                 $finalPrice = $price->getPrice();
                 $productName = $produkt->getProductName();
                 $productPrice = $produkt->getProductPrice();
+                $userFixedDisc = $Jos->getFixedDisc();
+                $userVariableDisc = $Jos->getVariableDisc();
+                $groupnames = $groupJos->getGroupNames();
+                $fixedDiscounts = $groupJos->getFixedDiscounts();
+                $variableDiscounts = $groupJos->getVariableDiscounts();
+                $bestDiscounts = $groupJos->getDiscounts();
+                $priceMinFixed = $productPrice - $userFixedDisc;
+                $firstVarDisc = $bestDiscounts['variable']/100 * $priceMinFixed;
             }
         }
 

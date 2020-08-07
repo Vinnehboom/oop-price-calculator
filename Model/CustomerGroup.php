@@ -5,19 +5,24 @@ class CustomerGroup
 {
     private int $parentId;
     private array $discounts;
-    private array $family;
+    private array $fixedDiscounts;
+    private array $variableDiscounts;
+    private array $groupNames;
 
     public function __construct(Customer $customer, PDO $pdo)
     {
         $customerGroupId = $customer->getGroupId();
         // start statement
-        $statement = $pdo->prepare('SELECT parent_id, fixed_discount, variable_discount from customer_group where id =:id');
+        $statement = $pdo->prepare('SELECT name, parent_id, fixed_discount, variable_discount from customer_group where id =:id');
         $statement->bindValue('id', $customerGroupId);
         $statement->execute();
         $totalArray = $statement->fetch();
         $this->parentId = intval($totalArray['parent_id']);
-        $this->discounts['variable'] =  intval($totalArray['variable_discount']);
-        $this->discounts['fixed'] = intval($totalArray['fixed_discount']);
+        $this->discounts['variable'] = (int)$totalArray['variable_discount'];
+        $this->discounts['fixed'] = (int)$totalArray['fixed_discount'];
+        $this->variableDiscounts[] = (int)$totalArray['variable_discount'];
+        $this->fixedDiscounts[] = (int)$totalArray['fixed_discount'];
+        $this->groupNames[] = $totalArray['name'];
         $this->setDiscounts($pdo);
     }
     private function setDiscounts($pdo) : void
@@ -27,17 +32,24 @@ class CustomerGroup
         $pdo = $database->getPdo();*/
 
         $parentId = $this->getParentId();
-        $statement = $pdo->prepare('SELECT parent_id, fixed_discount, variable_discount from customer_group where id = :parent_id');
+        $statement = $pdo->prepare('SELECT name, parent_id, fixed_discount, variable_discount from customer_group where id = :parent_id');
         $statement->bindValue('parent_id', $parentId);
         $statement->execute();
         $parent = $statement->fetch();
+        $this->groupNames[] = $parent['name'];
         // $parent is array with info in it
         // reassigning or summation of discounts
         if ($parent['fixed_discount']) {
-            $this->discounts['fixed'] += intval($parent['fixed_discount']);
-        } elseif ($parent['variable_discount'] > $this->discounts['variable'])
+            $this->discounts['fixed'] += (int)$parent['fixed_discount'];
+            $this->fixedDiscounts[] = (int)$parent['fixed_discount'];
+            $this->variableDiscounts[] = 0;
+        } elseif ($parent['variable_discount'])
         {
-            $this->discounts['variable'] = intval($parent['variable_discount']);
+            $this->variableDiscounts[] = $parent['variable_discount'];
+            $this->fixedDiscounts[] = 0;
+            if($parent['variable_discount'] > $this->discounts['variable'])
+            $this->discounts['variable'] = (int)$parent['variable_discount'];
+            $this->variableDiscounts[] = 0;
         }
         if ($parent['parent_id'])
         {
@@ -45,30 +57,6 @@ class CustomerGroup
             $this->setDiscounts($pdo);
         }
     }
-
-    public function groupLoader(Customer $customer, PDO $pdo) : void
-    {
-        $groupId = $customer->getGroupId();
-        $statement = $pdo->prepare('SELECT * from customer_group where id = :id');
-        $statement->bindValue('id', $groupId);
-        $statement->execute();
-        $fetch = $statement->fetch();
-        $this->family[] = [$fetch['name'] => ['variable' => (int)$fetch['variable_discount']]];
-        $this->family[] = [$fetch['name'] => ['fixed' => (int)$fetch['fixed_discount']]];
-        if ($fetch['parent_id'] !== null) {
-            $customer->setGroupId((int)$fetch['parent_id']);
-            $this->groupLoader($customer, $pdo);
-        }
-    }
-    /**
-     * @return array
-     */
-    public function getFamily(): array
-    {
-        return $this->family;
-    }
-
-
     /**
      * @return array
      */
@@ -83,6 +71,30 @@ class CustomerGroup
     public function getParentId()
     {
         return $this->parentId;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFixedDiscounts(): array
+    {
+        return $this->fixedDiscounts;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVariableDiscounts(): array
+    {
+        return $this->variableDiscounts;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGroupNames(): array
+    {
+        return $this->groupNames;
     }
 
 }
