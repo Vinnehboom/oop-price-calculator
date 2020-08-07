@@ -30,18 +30,25 @@
         <th>Variable Discount</th>
         <td></td>
     </tr>
-    <tr>
-        <td>Telenet</td>
-        <td>10</td>
-        <td>5%</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>Marketing</td>
-        <td>5</td>
-        <td>20%</td>
-        <td></td>
-    </tr>
+    <?php
+    foreach ($familyArray as $key => $value) {
+    echo "<tr>";
+    echo '<td>' . $value['name'] . '</td>';
+
+    if ($value['fixed']) {
+    echo '<td>' . $value['fixed'] . '</td>';
+    } else {
+        echo '<td>0</td>';
+    }
+    if ($value['variable']){
+    echo '<td>' . $value['variable'] . '%</td>';
+    } else {
+    echo '<td>0%</td>';
+    }
+    echo '<td>test</td>';
+    echo '<tr>';
+    }
+    ?>
     <tr>
         <th>Group Discount Result</th>
         <th>Fixed (total)</th>
