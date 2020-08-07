@@ -28,10 +28,15 @@ Anything complex should be calculated in the model -->
         <?php endif; ?>
         <input type="submit">
     </form>
-
     <h2> <?php if ($finalPrice) {
         include 'includes/table.php';
         echo $finalPrice;
     } ?></h2>
+    <h2> <?php if ($finalPrice) {echo $finalPrice;} ?></h2>
+    <h3> <?php print_r($familyArray); ?></h3>
+
+    <form action="index.php" method="POST">
+        <input type="submit" value="Log out" name="logout">
+    </form>
 </section>
 <?php require 'includes/footer.php'?>

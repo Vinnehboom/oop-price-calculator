@@ -11,6 +11,10 @@ require 'Model/CustomerGroup.php';
 require 'Model/DatabaseHandler.php';
 require 'Model/Price.php';
 session_start();
+
+if(isset($_POST['logout'])){
+    session_unset();
+}
 //include all your controllers here
 require 'Controller/IndexController.php';
 require 'Controller/LoginController.php';

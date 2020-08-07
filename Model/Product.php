@@ -53,9 +53,9 @@ class Product
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getProductPrice(): int
+    public function getProductPrice(): float
     {
         return $this->productPrice;
     }

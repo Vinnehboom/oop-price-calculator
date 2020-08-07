@@ -41,7 +41,7 @@ class DatabaseHandler
             $lastname = $customer['lastname'];
             $id = intval($customer['id']);
             $groupId = intval($customer['group_id']);
-            $customers[] = new Customer($firstname, $lastname, $id, $groupId);
+            $customers[] = new Customer($firstname, $lastname, $id, $groupId, $pdo);
 
         }
         return $customers;
@@ -81,7 +81,7 @@ class DatabaseHandler
         $statement->bindValue('id', $customerId);
         $statement->execute();
         $fetchArray = $statement->fetch();
-        return new Customer($fetchArray['firstname'], $fetchArray['lastname'], $customerId, $fetchArray['group_id']);
+        return new Customer($fetchArray['firstname'], $fetchArray['lastname'], $customerId, $fetchArray['group_id'], $pdo);
 
     }
 
