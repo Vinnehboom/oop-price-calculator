@@ -29,6 +29,9 @@ Anything complex should be calculated in the model -->
         <input type="submit">
     </form>
 
-    <h2> <?php if ($finalPrice) {echo $finalPrice;} ?></h2>
+    <h2> <?php if ($finalPrice) {
+        include 'includes/table.php';
+        echo $finalPrice;
+    } ?></h2>
 </section>
 <?php require 'includes/footer.php'?>
